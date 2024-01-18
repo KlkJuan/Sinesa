@@ -1,6 +1,7 @@
 package cinesito;
 
 //Clase ProcesadorPagos
+//Clase ProcesadorPagos
 public class ProcesadorDePagos {
  private Cine cine;
 
@@ -11,24 +12,23 @@ public class ProcesadorDePagos {
 
  // Método para procesar el pago
  public boolean procesarPago(String cuentaCliente, int fondosCliente) {
-     int costoAsiento = cine.getCostoAsiento(); // Obtener el costo del asiento del cine
-
-     if (fondosCliente >= costoAsiento) {
-         // Suficientes fondos, procesar el pago
-         int nuevaRecaudacion = cine.getRecaudacionTotal() + costoAsiento;
-         cine.setRecaudacionTotal(nuevaRecaudacion);
-
-         // Actualizar la cuenta del cliente
-         // (Este es un lugar ficticio, en una aplicación real se usarían servicios bancarios)
-         System.out.println("Pago exitoso de " + costoAsiento + " desde la cuenta " + cuentaCliente);
-
+     if (fondosCliente >= calcularCostoAsiento()) {
+         // Simulación de transferencia de fondos
+         // (En una implementación real, aquí se realizaría la transferencia bancaria)
+         
+         // Actualizar la recaudación total del cine
+         cine.agregarRecaudacion(calcularCostoAsiento());
          return true; // Pago exitoso
      } else {
-         // Fondos insuficientes
-         System.out.println("Fondos insuficientes en la cuenta " + cuentaCliente);
-
          return false; // Fondos insuficientes
      }
  }
+
+ // Método para calcular el costo de un asiento (puedes ajustar esta lógica según sea necesario)
+ private int calcularCostoAsiento() {
+     // Puedes implementar una lógica más sofisticada para calcular el costo de los asientos
+     return 10; // Costo fijo por asiento
+ }
 }
+
 

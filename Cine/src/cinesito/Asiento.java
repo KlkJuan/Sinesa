@@ -1,6 +1,7 @@
 package cinesito;
 
 //Clase Asiento
+//Clase Asiento
 public class Asiento {
  private int fila;
  private int columna;
@@ -10,10 +11,10 @@ public class Asiento {
  public Asiento(int fila, int columna) {
      this.fila = fila;
      this.columna = columna;
-     this.ocupado = false; // Inicialmente, el asiento no está ocupado
+     this.ocupado = false; // Al inicio, todos los asientos están disponibles
  }
 
- // Getters y setters
+ // Getters y Setters
  public int getFila() {
      return fila;
  }
@@ -30,9 +31,14 @@ public class Asiento {
      this.ocupado = ocupado;
  }
 
- // Método toString para representación en cadena
+ // Método toString para representación en cadena del asiento
  @Override
  public String toString() {
-     return "Asiento [fila=" + fila + ", columna=" + columna + ", ocupado=" + ocupado + "]";
+     return "Asiento{" +
+             "fila=" + fila +
+             ", columna=" + columna +
+             ", ocupado=" + ocupado +
+             '}';
  }
 }
+

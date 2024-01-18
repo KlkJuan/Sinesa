@@ -3,54 +3,43 @@ package cinesito;
 import java.util.Random;
 
 //Clase Main
+//Clase Main
 public class Main {
  public static void main(String[] args) {
-     // Inicialización de Componentes
+     // Crear instancias de Cine, ProcesadorPagos, GestorReservas y Visualizador
      Cine cine = new Cine();
-     ProcesadorDePagos procesadorPagos = new ProcesadorDePagos(cine);
-     GestorDeReservas gestorReservas = new GestorDeReservas(cine, procesadorPagos);
+     ProcesadorDePagos procesadorDePagos = new ProcesadorDePagos(cine);
      Visualizador visualizador = new Visualizador(cine);
+     GestorDeReservas gestorReservas = new GestorDeReservas(cine, procesadorDePagos, visualizador);
 
-     // Inicio del hilo de Visualizador
-     visualizador.start();
+     // Iniciar el hilo del visualizador
+     Thread hiloVisualizador = new Thread(visualizador);
+     hiloVisualizador.start();
 
-     // Gestión de Hilos
-     Thread visualizadorThread = new Thread(visualizador);
-
-     // Inicia el hilo del Visualizador
-     visualizadorThread.start();
-
-     // Ciclo de Simulación
+     // Simulación continua
      while (true) {
-         // Generación de Clientes
-         generarCliente(gestorReservas);
+         // Generar clientes con datos aleatorios (puedes personalizar esta lógica)
+         Cliente cliente = new Cliente(
+                 "NombreCliente",
+                 "ApellidoCliente",
+                 "correo@cliente.com",
+                 null, (int) (Math.random() * 100), // Fondos aleatorios entre 0 y 100
+                 gestorReservas,
+                 (int) (Math.random() * Cine.FILAS) + 1, // Fila aleatoria entre 1 y FILAS
+                 (int) (Math.random() * Cine.COLUMNAS) + 1 // Columna aleatoria entre 1 y COLUMNAS
+         );
 
-         // Pequeña pausa para la simulación
+         // Iniciar un hilo para el cliente y procesar su reserva
+         Thread hiloCliente = new Thread(cliente);
+         hiloCliente.start();
+
+         // Puedes ajustar el intervalo entre la generación de clientes según sea necesario
          try {
-             Thread.sleep(1000);
+             Thread.sleep(2000); // Esperar 2000 milisegundos (2 segundos) antes de generar otro cliente
          } catch (InterruptedException e) {
              e.printStackTrace();
          }
      }
  }
-
- // Método para generar un cliente con datos aleatorios y realizar la reserva
- private static void generarCliente(GestorDeReservas gestorReservas) {
-     Random rand = new Random();
-
-     // Datos aleatorios para el cliente
-     String nombre = "Cliente" + rand.nextInt(100);
-     String apellidos = "Apellido" + rand.nextInt(100);
-     String correo = "cliente" + rand.nextInt(100) + "@correo.com";
-     String cuentaBancaria = "Cuenta" + rand.nextInt(100);
-     int fondos = rand.nextInt(100) + 1; // Fondos entre 1 y 100
-     int filaDeseada = rand.nextInt(Cine.FILAS);
-     int columnaDeseada = rand.nextInt(Cine.COLUMNAS);
-
-     // Crea e inicia el hilo del Cliente
-     Cliente cliente = new Cliente(nombre, apellidos, correo, cuentaBancaria, fondos, gestorReservas,
-             filaDeseada, columnaDeseada);
-     Thread clienteThread = new Thread(cliente);
-     clienteThread.start();
- }
 }
+

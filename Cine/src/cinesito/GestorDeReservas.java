@@ -1,61 +1,66 @@
 package cinesito;
 
 //Clase GestorReservas
+//Clase GestorReservas
 public class GestorDeReservas {
  private Cine cine;
- private ProcesadorDePagos procesadorPagos;
+ private ProcesadorDePagos procesadorDePagos;
  private Visualizador visualizador;
 
  // Constructor
- public GestorDeReservas(Cine cine, ProcesadorDePagos procesadorPagos, Visualizador visualizador) {
+ public GestorDeReservas(Cine cine, ProcesadorDePagos procesadorDePagos, Visualizador visualizador) {
      this.cine = cine;
-     this.procesadorPagos = procesadorPagos;
+     this.procesadorDePagos = procesadorDePagos;
      this.visualizador = visualizador;
  }
 
  // Método para intentar reservar un asiento
  public void intentarReservar(Cliente cliente, int filaDeseada, int columnaDeseada) {
-     if (cine.verificarDisponibilidad(filaDeseada, columnaDeseada)) {
-         procesarReserva(cliente, filaDeseada, columnaDeseada);
+     if (!cine.verificarDisponibilidad(filaDeseada, columnaDeseada)) {
+         // El asiento deseado está ocupado, buscar asiento alternativo
+         buscarAsientoAlternativo(cliente, filaDeseada, columnaDeseada);
      } else {
-         // Si el asiento deseado está ocupado, buscar un asiento alternativo
-         buscarAsientoAlternativo(filaDeseada, columnaDeseada);
+         // El asiento deseado está disponible, proceder con la reserva
+         procesarReserva(cliente, filaDeseada, columnaDeseada);
      }
  }
 
  // Método para buscar un asiento alternativo
- private void buscarAsientoAlternativo(int filaDeseada, int columnaDeseada) {
-     // Implementar lógica para encontrar un asiento alternativo
-     // Puedes adaptar esta lógica según tus requisitos específicos
-
-     // Aquí hay un ejemplo básico de cómo podrías buscar un asiento alternativo cercano:
-     for (int i = filaDeseada - 1; i <= filaDeseada + 1; i++) {
-         for (int j = columnaDeseada - 1; j <= columnaDeseada + 1; j++) {
+ private void buscarAsientoAlternativo(Cliente cliente, int filaDeseada, int columnaDeseada) {
+     // Implementa la lógica para encontrar un asiento alternativo
+     // Puedes priorizar los asientos más cercanos al originalmente seleccionado
+     // (Por simplicidad, en este ejemplo, se reserva el primer asiento disponible)
+     for (int i = 1; i <= Cine.FILAS; i++) {
+         for (int j = 1; j <= Cine.COLUMNAS; j++) {
              if (cine.verificarDisponibilidad(i, j)) {
-                 // Asiento alternativo encontrado, reserva
-                 procesarReserva(new Cliente(), i, j); // Aquí se crea un cliente ficticio para la reserva
+                 procesarReserva(cliente, i, j);
                  return;
              }
          }
      }
 
-     // No se encontraron asientos alternativos
-     System.out.println("No hay asientos disponibles cercanos. La reserva no se puede completar.");
+     // No hay asientos alternativos disponibles, manejar el caso según sea necesario
+     // (En este ejemplo, simplemente notificamos al cliente)
+     System.out.println("No hay asientos alternativos disponibles.");
  }
 
- // Método para procesar una reserva
- private void procesarReserva(Cliente cliente, int fila, int columna) {
-     // Procesar el pago
-     boolean pagoExitoso = procesadorPagos.procesarPago(cliente.getCuentaBancaria(), cliente.getFondos());
-
-     // Si el pago es exitoso, confirmar la reserva
-     if (pagoExitoso) {
+ // Método para procesar la reserva
+ public void procesarReserva(Cliente cliente, int fila, int columna) {
+     // Realizar el proceso de pago
+     if (procesadorDePagos.procesarPago(cliente.getCuentaBancaria(), cliente.getFondos())) {
+         // Pago exitoso, reservar el asiento
          cine.reservarAsiento(fila, columna);
+         
+         // Notificar al visualizador para actualizar la visualización
          visualizador.notificarCambio();
-         System.out.println("Reserva exitosa para el cliente " + cliente.getNombre());
+
+         // (Opcional: Puedes realizar otras acciones, como enviar un correo de confirmación al cliente)
      } else {
-         System.out.println("La reserva no pudo ser completada para el cliente " + cliente.getNombre());
+         // Fondos insuficientes, manejar el caso según sea necesario
+         // (En este ejemplo, simplemente notificamos al cliente)
+         System.out.println("Fondos insuficientes para reservar el asiento.");
      }
  }
 }
+
 
