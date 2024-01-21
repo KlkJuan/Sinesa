@@ -1,34 +1,46 @@
 package cinesito;
 
-//Clase ProcesadorPagos
-//Clase ProcesadorPagos
 public class ProcesadorDePagos {
- private Cine cine;
+	//Atributo
+	private Cine cine;
+	private int entrada=10;
+	//Constructor
+	public ProcesadorDePagos(Cine cine) {
+		
+		this.cine = cine;
+	}
+	
+	public static void ProcesadorDePagos() {
+	}
+	
+	//Metodos
+	public boolean procesarPago(String cuentaCliente,int fondosCliente) {
+		if(fondosCliente>=entrada) {
+			this.cine.agregarRecaudacion(entrada);
+			System.out.println("Se ha realizado el pago correctamente");
+		}
+		System.out.println("Fallo en el pago");
+		return false;
+	}
+	
+	//Getters y Setters
+	public Cine getCine() {
+		return cine;
+	}
 
- // Constructor
- public ProcesadorDePagos(Cine cine) {
-     this.cine = cine;
- }
+	public void setCine(Cine cine) {
+		this.cine = cine;
+	}
 
- // Método para procesar el pago
- public boolean procesarPago(String cuentaCliente, int fondosCliente) {
-     if (fondosCliente >= calcularCostoAsiento()) {
-         // Simulación de transferencia de fondos
-         // (En una implementación real, aquí se realizaría la transferencia bancaria)
-         
-         // Actualizar la recaudación total del cine
-         cine.agregarRecaudacion(calcularCostoAsiento());
-         return true; // Pago exitoso
-     } else {
-         return false; // Fondos insuficientes
-     }
- }
+	public int getEntrada() {
+		return entrada;
+	}
 
- // Método para calcular el costo de un asiento (puedes ajustar esta lógica según sea necesario)
- private int calcularCostoAsiento() {
-     // Puedes implementar una lógica más sofisticada para calcular el costo de los asientos
-     return 10; // Costo fijo por asiento
- }
-}
+	public void setEntrada(int entrada) {
+		this.entrada = entrada;
+	}
+	
+	
+}	
 
 
